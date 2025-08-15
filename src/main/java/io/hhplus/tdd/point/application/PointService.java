@@ -1,7 +1,9 @@
 package io.hhplus.tdd.point.application;
 
+import io.hhplus.tdd.HHPlusAppExcetion;
 import io.hhplus.tdd.database.PointHistoryTable;
 import io.hhplus.tdd.database.UserPointTable;
+import io.hhplus.tdd.point.ErrorCode;
 import io.hhplus.tdd.point.PointHistory;
 import io.hhplus.tdd.point.TransactionType;
 import io.hhplus.tdd.point.UserPoint;
@@ -41,6 +43,20 @@ public class PointService {
         return savedUserPoint;
     }
 
+    public UserPoint use(long id, long amount) {
+        UserPoint currentUserPoint = findUserPointById(id);
+
+        validateEnoughBalance(currentUserPoint.point(), amount);
+
+        long remainingPoint = currentUserPoint.point() - amount;
+
+        UserPoint savedUserPoint = userPointTable.insertOrUpdate(id, remainingPoint);
+
+        updatePointHistory(savedUserPoint, amount, TransactionType.USE);
+
+        return savedUserPoint;
+    }
+
     private void updatePointHistory(UserPoint savedUserPoint, long amount, TransactionType type) {
         pointHistoryTable.insert(savedUserPoint.id(), amount, type, savedUserPoint.updateMillis());
     }
@@ -49,4 +65,9 @@ public class PointService {
         return userPointTable.selectById(id);
     }
 
+    private void validateEnoughBalance(long memberBalance, long amount) {
+        if (memberBalance < amount) {
+            throw new HHPlusAppExcetion(ErrorCode.INVALID_BALANCE.getErrorResponse());
+        }
+    }
 }
