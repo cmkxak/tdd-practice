@@ -103,7 +103,7 @@ class PointServiceTest {
 
         List<PointHistory> useHists = pointHistories.stream()
                 .filter(pointHistory -> pointHistory.type().equals(TransactionType.USE))
-                .collect(Collectors.toList());
+                .toList();
 
         int lastIdx = useHists.size() - 1;
         assertThat(useHists.get(lastIdx).amount()).isEqualTo(5000);
