@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class HHPlusAppExcetion extends RuntimeException {
 
-    private ErrorResponse errorResponse;
+    private final ErrorResponse errorResponse;
 
     public HHPlusAppExcetion(ErrorResponse errorResponse) {
         this.errorResponse = errorResponse;
