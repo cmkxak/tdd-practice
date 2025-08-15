@@ -17,7 +17,6 @@ public class PointService {
         this.userPointTable = userPointTable;
     }
 
-
     public UserPoint charge(long id, long amount) {
         UserPoint currentUserPoint = findUserPointById(id);
 
