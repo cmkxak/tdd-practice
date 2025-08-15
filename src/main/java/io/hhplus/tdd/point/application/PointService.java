@@ -2,9 +2,12 @@ package io.hhplus.tdd.point.application;
 
 import io.hhplus.tdd.database.PointHistoryTable;
 import io.hhplus.tdd.database.UserPointTable;
+import io.hhplus.tdd.point.PointHistory;
 import io.hhplus.tdd.point.TransactionType;
 import io.hhplus.tdd.point.UserPoint;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PointService {
@@ -17,6 +20,15 @@ public class PointService {
         this.userPointTable = userPointTable;
     }
 
+
+    public UserPoint findPointById(long id) {
+        return userPointTable.selectById(id);
+    }
+
+    public List<PointHistory> findPointHistoriesById(long id) {
+        return pointHistoryTable.selectAllByUserId(id);
+    }
+
     public UserPoint charge(long id, long amount) {
         UserPoint currentUserPoint = findUserPointById(id);
 
@@ -27,10 +39,6 @@ public class PointService {
         updatePointHistory(savedUserPoint, amount, TransactionType.CHARGE);
 
         return savedUserPoint;
-    }
-
-    public UserPoint findPointById(long id) {
-        return findUserPointById(id);
     }
 
     private void updatePointHistory(UserPoint savedUserPoint, long amount, TransactionType type) {
