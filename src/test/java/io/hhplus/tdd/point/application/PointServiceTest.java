@@ -89,4 +89,25 @@ class PointServiceTest {
         assertThat(remainingUserPoint.point()).isEqualTo(5000);
     }
 
+    @Test
+    void use_hist() {
+        //given
+        long id = 1;
+        long amount = 5000;
+
+        //when
+        UserPoint remainingUserPoint = pointService.use(id, amount);
+
+        //then
+        List<PointHistory> pointHistories = pointHistoryTable.selectAllByUserId(id);
+
+        List<PointHistory> useHists = pointHistories.stream()
+                .filter(pointHistory -> pointHistory.type().equals(TransactionType.USE))
+                .collect(Collectors.toList());
+
+        int lastIdx = useHists.size() - 1;
+        assertThat(useHists.get(lastIdx).amount()).isEqualTo(5000);
+    }
+
+
 }
