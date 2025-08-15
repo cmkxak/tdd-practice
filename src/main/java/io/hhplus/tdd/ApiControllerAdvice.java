@@ -1,5 +1,6 @@
 package io.hhplus.tdd;
 
+import io.hhplus.tdd.point.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -7,8 +8,17 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @RestControllerAdvice
 class ApiControllerAdvice extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         return ResponseEntity.status(500).body(new ErrorResponse("500", "에러가 발생했습니다."));
     }
+
+    @ExceptionHandler(value = HHPlusAppExcetion.class)
+    public ResponseEntity<ErrorResponse> handleException(HHPlusAppExcetion e) {
+        return ResponseEntity.status(200)
+                .body(e.getErrorResponse());
+    }
+
+
 }
