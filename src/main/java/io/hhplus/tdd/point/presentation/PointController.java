@@ -1,5 +1,8 @@
-package io.hhplus.tdd.point;
+package io.hhplus.tdd.point.presentation;
 
+import io.hhplus.tdd.point.PointHistory;
+import io.hhplus.tdd.point.UserPoint;
+import io.hhplus.tdd.point.application.PointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +14,13 @@ import java.util.List;
 public class PointController {
 
     private static final Logger log = LoggerFactory.getLogger(PointController.class);
-    private final PointService
+
+    private final PointService pointService;
+
+    public PointController(PointService pointService) {
+        this.pointService = pointService;
+    }
+
     /**
      * TODO - 특정 유저의 포인트를 조회하는 기능을 작성해주세요.
      */
@@ -41,7 +50,7 @@ public class PointController {
             @PathVariable long id,
             @RequestBody long amount
     ) {
-        return new UserPoint(0, 0, 0);
+        return pointService.charge(id, amount);
     }
 
     /**
