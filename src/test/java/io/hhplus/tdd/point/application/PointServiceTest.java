@@ -63,4 +63,17 @@ class PointServiceTest {
         assertThat(chargeHists.get(lastIdx).amount()).isEqualTo(15000);
     }
 
+    @Test
+    void fail_not_enough_balance() {
+        //given
+        long id = 1;
+        long amount = 15000;
+
+        //when
+        HHPlusAppExcetion hhPlusAppExcetion = assertThrows(HHPlusAppExcetion.class, () -> pointService.use(id, amount));
+
+        //then
+        assertThat(hhPlusAppExcetion.getErrorResponse().code()).isEqualTo("ERR-100");
+    }
+
 }
