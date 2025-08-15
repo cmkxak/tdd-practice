@@ -76,4 +76,17 @@ class PointServiceTest {
         assertThat(hhPlusAppExcetion.getErrorResponse().code()).isEqualTo("ERR-100");
     }
 
+    @Test
+    void success_use() {
+        //given
+        long id = 1;
+        long amount = 5000;
+
+        //when
+        UserPoint remainingUserPoint = pointService.use(id, amount);
+
+        //then
+        assertThat(remainingUserPoint.point()).isEqualTo(5000);
+    }
+
 }
