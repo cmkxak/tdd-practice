@@ -45,4 +45,22 @@ class PointServiceTest {
         assertThat(updatedUserPoint.point()).isEqualTo(25000);
     }
 
+    @Test
+    void charge_hist() {
+        //given
+        long id = 1;
+        long amount = 15000;
+
+        //when
+        UserPoint updatedUserPoint = pointService.charge(id, amount);
+
+        //then
+        List<PointHistory> chargeHists = pointHistoryTable.selectAllByUserId(updatedUserPoint.id())
+                .stream().filter(pointHistory -> pointHistory.type() == TransactionType.CHARGE)
+                .toList();
+
+        int lastIdx = chargeHists.size() - 1;
+        assertThat(chargeHists.get(lastIdx).amount()).isEqualTo(15000);
+    }
+
 }
